@@ -28,6 +28,8 @@ Open http://localhost:3000. The home page (`/`) is a splash screen, and **Comenz
 | `src/components/Chat.tsx` | Chat UI that renders markdown and shows each tool calculation |
 | `src/components/Calculator.tsx` | Offline material calculator |
 
+`npm run build` uses webpack (`next build --webpack`) because some hosting build environments can't start the helper Node process that Turbopack uses to run CSS loaders (Tailwind runs through PostCSS). `npm run dev` still uses Turbopack.
+
 Server-side refusal fallbacks (`fallbacks: "default"`) are on. Effort is set to `medium`. You can change it in `route.ts`.
 
 > Estimates are for small jobs and guidance only. Structural work needs an engineered mix design and must follow local code.
