@@ -9,7 +9,7 @@ A Next.js app for cement and concrete construction:
 
 ```bash
 npm install
-cp .env.example .env.local   # then add your Anthropic API key
+cp .env.example .env.local   # then add your Anthropic API key and NEXT_PUBLIC_SITE_URL
 npm run dev
 ```
 
@@ -22,6 +22,10 @@ Open http://localhost:3000. The home page (`/`) is a splash screen, and logging 
 | `src/app/page.tsx` → `src/components/Splash.tsx` | Home page / splash screen (background photo by Rodolfo Quirós on Pexels) |
 | `src/app/calculadora/page.tsx` | Assistant and calculator page (background photo by SMC on Pexels) |
 | `src/app/icon.svg` | Favicon, also used as the logo |
+| `src/lib/site.ts` | Site name, description, keywords and URL (`NEXT_PUBLIC_SITE_URL`) used for SEO |
+| `src/app/layout.tsx` | Default metadata (Open Graph, Twitter, robots, canonical) and WebApplication JSON-LD |
+| `src/app/robots.ts`, `sitemap.ts`, `manifest.ts` | `/robots.txt`, `/sitemap.xml`, `/manifest.webmanifest` |
+| `src/app/opengraph-image.tsx`, `twitter-image.tsx` | Generated 1200×630 social preview image |
 | `src/lib/concrete.ts` | Calculations: volumes, nominal mixes (M10–M25), and ACI 209 strength gain |
 | `src/lib/tools.ts` | The calculations wrapped as Claude tools (`betaZodTool`) |
 | `src/app/api/chat/route.ts` | Streams the chat and runs the tool loop with `client.beta.messages.toolRunner`, sending results as NDJSON |

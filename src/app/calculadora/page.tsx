@@ -4,9 +4,32 @@ import Link from "next/link";
 import Calculator from "@/components/Calculator";
 import Chat from "@/components/Chat";
 import logo from "@/app/icon.svg";
+import { SITE } from "@/lib/site";
+
+const TITLE = "Calculadora de concreto y asistente de obra";
+const DESCRIPTION =
+  "Calcula volumen, bultos de cemento, arena, grava y agua para losas, zapatas y columnas, y pregúntale al asistente con IA sobre mezclas, colado y curado.";
 
 export const metadata: Metadata = {
-  title: "Calculadora y asistente · Cemento y Concreto IA",
+  title: TITLE,
+  description: DESCRIPTION,
+  alternates: { canonical: "/calculadora" },
+  openGraph: {
+    type: "website",
+    locale: SITE.locale,
+    siteName: SITE.name,
+    url: "/calculadora",
+    title: TITLE,
+    description: DESCRIPTION,
+    // Overriding openGraph here drops the root's file-based image, so point at it explicitly.
+    images: [{ url: "/opengraph-image", width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: TITLE,
+    description: DESCRIPTION,
+    images: ["/twitter-image"],
+  },
 };
 
 export default function CalculadoraPage() {
