@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useEffect, useLayoutEffect, useState } from "react";
+import { type FormEvent, useEffect, useLayoutEffect, useState } from "react";
 import logo from "@/app/icon.svg";
 
 const FEATURES = [
@@ -13,23 +13,41 @@ const FEATURES = [
 
 const APP_ROUTE = "/calculadora";
 
+// Hardcoded demo credentials — client-side only, not real authentication.
+const DEMO_USER = "admin";
+const DEMO_PASSWORD = "concreto";
+
 export default function Splash() {
   const router = useRouter();
   const [leaving, setLeaving] = useState(false);
+  const [user, setUser] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     router.prefetch(APP_ROUTE);
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Enter") setLeaving(true);
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
   }, [router]);
+
+  const onSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    if (user.trim() === DEMO_USER && password === DEMO_PASSWORD) {
+      setError(false);
+      setLeaving(true);
+    } else {
+      setError(true);
+    }
+  };
 
   // With cacheComponents, Next hides this page (React <Activity>) instead of
   // unmounting it, so `leaving` would survive navigation and replay the exit
   // animation — and its redirect — on return. Reset it when the page is hidden.
-  useLayoutEffect(() => () => setLeaving(false), []);
+  useLayoutEffect(
+    () => () => {
+      setLeaving(false);
+      setPassword("");
+    },
+    [],
+  );
 
   return (
     <div
@@ -66,10 +84,6 @@ export default function Splash() {
           className="animate-rise mb-8 rounded-3xl shadow-2xl shadow-orange-900/50 ring-1 ring-white/20"
         />
 
-        <span className="animate-rise mb-5 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs font-medium tracking-wide text-orange-300 backdrop-blur [animation-delay:80ms]">
-          CEMENTO Y CONCRETO · IA
-        </span>
-
         <h1 className="animate-rise text-balance text-5xl font-bold tracking-tight sm:text-7xl [animation-delay:160ms] uppercase">
           Construye con{" "}
           <span className="bg-gradient-to-r from-orange-400 via-amber-300 to-orange-500 bg-clip-text text-transparent">
@@ -81,13 +95,51 @@ export default function Splash() {
           Tu asistente de obra para calcular, mezclar, colar y curar concreto. Respuestas claras y números exactos, en segundos.
         </p>
 
-        <button
-          onClick={() => setLeaving(true)}
-          className="animate-rise group mt-10 inline-flex items-center gap-2 rounded-2xl bg-orange-600 px-8 py-4 text-lg font-semibold text-white shadow-lg shadow-orange-900/40 transition hover:bg-orange-500 hover:shadow-orange-700/50 focus:outline-none focus-visible:ring-4 focus-visible:ring-orange-400/50 [animation-delay:320ms] uppercase"
+        <form
+          onSubmit={onSubmit}
+          className="animate-rise mt-10 flex w-full max-w-sm flex-col gap-3 rounded-2xl border border-white/10 bg-white/[0.04] p-5 text-left backdrop-blur [animation-delay:320ms]"
         >
-          Comenzar
-          <span className="transition-transform group-hover:translate-x-1">→</span>
-        </button>
+          <label className="flex flex-col gap-1 text-xs font-medium uppercase tracking-wide text-stone-400">
+            Usuario
+            <input
+              type="text"
+              autoComplete="username"
+              value={user}
+              onChange={(e) => {
+                setUser(e.target.value);
+                setError(false);
+              }}
+              className="rounded-xl border border-white/10 bg-stone-950/60 px-4 py-3 text-base normal-case tracking-normal text-stone-100 outline-none transition focus:border-orange-500/60 focus:ring-2 focus:ring-orange-500/30"
+            />
+          </label>
+          <label className="flex flex-col gap-1 text-xs font-medium uppercase tracking-wide text-stone-400">
+            Contraseña
+            <input
+              type="password"
+              autoComplete="current-password"
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                setError(false);
+              }}
+              className="rounded-xl border border-white/10 bg-stone-950/60 px-4 py-3 text-base normal-case tracking-normal text-stone-100 outline-none transition focus:border-orange-500/60 focus:ring-2 focus:ring-orange-500/30"
+            />
+          </label>
+
+          {error && (
+            <p role="alert" className="text-sm text-white/80 text-center uppercase font-bold tracking-wide">
+              Usuario o contraseña incorrectos.
+            </p>
+          )}
+
+          <button
+            type="submit"
+            className="group mt-2 inline-flex items-center justify-center gap-2 rounded-2xl bg-orange-600 px-8 py-4 text-lg font-semibold text-white shadow-lg shadow-orange-900/40 transition hover:bg-orange-500 hover:shadow-orange-700/50 focus:outline-none focus-visible:ring-4 focus-visible:ring-orange-400/50 uppercase"
+          >
+            Iniciar sesión
+            <span className="transition-transform group-hover:translate-x-1">→</span>
+          </button>
+        </form>
 
         <div className="mt-14 grid w-full gap-4 sm:grid-cols-3">
           {FEATURES.map((f, i) => (

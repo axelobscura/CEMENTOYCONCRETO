@@ -13,7 +13,7 @@ cp .env.example .env.local   # then add your Anthropic API key
 npm run dev
 ```
 
-Open http://localhost:3000. The home page (`/`) is a splash screen, and **Comenzar** takes you to the assistant and calculator at `/calculadora`.
+Open http://localhost:3000. The home page (`/`) is a splash screen, and logging in (demo user `admin` / `concreto`, hardcoded in `Splash.tsx`) takes you to the assistant and calculator at `/calculadora`.
 
 ## How it works
 
